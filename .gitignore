@@ -1,0 +1,14 @@
+# modules
+node_modules
+
+# misc
+.DS_Store
+.out
+.idea/*
+.vscode/*
+.idea/*
+!.vscode/launch.json
+.env
+
+/lib
+/coverage

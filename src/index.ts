@@ -1,8 +1,8 @@
 import { ListNode } from './types';
-import { DEFAULT_CAPACITY } from './constants';
+import { MIN_CAPACITY, DEFAULT_CAPACITY } from './constants';
 
 class LruCache<K, V> {
-  private _capacity = DEFAULT_CAPACITY;
+  private _capacity = MIN_CAPACITY;
   private storageHead: ListNode<K, V> | null;
   private storageTail: ListNode<K, V> | null;
   private map: Map<K, ListNode<K, V>>;
@@ -16,7 +16,7 @@ class LruCache<K, V> {
   }
 
   protected set capacity(capacity: number) {
-    this._capacity = capacity < DEFAULT_CAPACITY ? DEFAULT_CAPACITY : capacity;
+    this._capacity = capacity < MIN_CAPACITY ? MIN_CAPACITY : capacity;
   }
 
   protected get capacity() {

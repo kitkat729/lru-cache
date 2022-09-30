@@ -1,25 +1,37 @@
 import { ListNode } from './types';
+import { DEFAULT_CAPACITY } from './constants';
 
 class LruCache<K, V> {
-  #capacity: number;
-  #storageHead: ListNode<K, V> | null;
-  #storageTail: ListNode<K, V> | null;
-  #map: Map<K, ListNode<K, V>>;
-  #size: number;
+  private _capacity = DEFAULT_CAPACITY;
+  private storageHead: ListNode<K, V> | null;
+  private storageTail: ListNode<K, V> | null;
+  private map: Map<K, ListNode<K, V>>;
+  private _size = 0;
 
-  constructor(capacity = 10) {
-    this.#capacity = capacity;
-    this.#storageHead = null; // most accessed node stored at the front
-    this.#storageTail = null;
-    this.#map = new Map<K, ListNode<K, V>>();
-    this.#size = 0;
+  constructor(capacity = DEFAULT_CAPACITY) {
+    this.capacity = capacity;
+    this.storageHead = null; // most accessed node stored at the front
+    this.storageTail = null;
+    this.map = new Map<K, ListNode<K, V>>();
+  }
+
+  protected set capacity(capacity: number) {
+    this._capacity = capacity < DEFAULT_CAPACITY ? DEFAULT_CAPACITY : capacity;
+  }
+
+  protected get capacity() {
+    return this._capacity;
+  }
+
+  get size() {
+    return this._size;
   }
 
   init() {
-    this.#storageHead = null; // most accessed node stored at the front
-    this.#storageTail = null;
-    this.#map.clear();
-    this.#size = 0;
+    this.storageHead = null; // most accessed node stored at the front
+    this.storageTail = null;
+    this.map.clear();
+    this._size = 0;
   }
 
   /**
@@ -30,32 +42,33 @@ class LruCache<K, V> {
    * @return {boolean} True if successful, otherwise false
    */
   put(key: K, value: V | undefined) {
-    let node = this.#map.has(key) ? this.#map.get(key) : null;
+    let node = this.map.has(key) ? this.map.get(key) : null;
     let isSuccess = false;
 
     // Considerations:
     // key exists
-    // capacity is full
-    // capacity is 0
+    // _capacity is full
+    // _capacity is 0
 
     if (node) {
       node.value = value;
-      this.#storageHead && this.moveNodeBefore(node, this.#storageHead);
+      this.storageHead && this.moveNodeBefore(node, this.storageHead);
       isSuccess = true;
     } else {
-      if (this.#storageTail && this.#size === this.#capacity) {
-        // remove least recently used nodes
-        const n = this.removeNode(this.#storageTail);
+      // Cache not empty and reached capacity
+      if (this.isFull() && this.storageTail) {
+        // bring the size below the capacity by removing a least recently used item
+        const n = this.removeNode(this.storageTail);
 
-        n.key && this.#map.delete(n.key);
-        this.#size--;
+        n.key && this.map.delete(n.key);
+        this._size--;
       }
 
-      if (this.#size < this.#capacity) {
+      if (this._size < this.capacity) {
         node = { key, value } as ListNode<K, V>;
         this.prependNode(node);
-        this.#size++;
-        this.#map.set(key, node);
+        this._size++;
+        this.map.set(key, node);
         isSuccess = true;
       }
     }
@@ -69,18 +82,19 @@ class LruCache<K, V> {
    * @return {V | undefined}
    */
   get(key: K): V | undefined {
-    const node = this.#map.has(key) ? this.#map.get(key) : null;
+    const node = this.map.has(key) ? this.map.get(key) : null;
 
     if (node) {
-      this.#storageHead && this.moveNodeBefore(node, this.#storageHead);
+      this.storageHead && this.moveNodeBefore(node, this.storageHead);
 
       return node.value;
     }
 
     return undefined;
   }
-  get size() {
-    return this.#size;
+
+  isFull() {
+    return this._size === this.capacity;
   }
 
   /**
@@ -90,25 +104,25 @@ class LruCache<K, V> {
    * @return {ListNode}
    */
   protected prependNode(node: ListNode<K, V>) {
-    if (this.#storageHead) {
-      this.#storageHead.prev = node;
-      node.next = this.#storageHead;
+    if (this.storageHead) {
+      this.storageHead.prev = node;
+      node.next = this.storageHead;
     }
-    this.#storageHead = node;
-    if (!this.#storageTail) {
-      this.#storageTail = node;
+    this.storageHead = node;
+    if (!this.storageTail) {
+      this.storageTail = node;
     }
 
     return node;
   }
   // appendNode(node: ListNode<K, V>) {
-  //   if (this.#storageTail) {
-  //     this.#storageTail.next = node;
-  //     node.prev = this.#storageTail;
+  //   if (this.storageTail) {
+  //     this.storageTail.next = node;
+  //     node.prev = this.storageTail;
   //   }
-  //   this.#storageTail = node;
-  //   if (!this.#storageHead) {
-  //     this.#storageHead = node;
+  //   this.storageTail = node;
+  //   if (!this.storageHead) {
+  //     this.storageHead = node;
   //   }
 
   //   return node;
@@ -125,20 +139,20 @@ class LruCache<K, V> {
     if (node.next) node.next.prev = node.prev;
 
     // Adjust head and tail pointers
-    if (this.#storageHead === node) {
+    if (this.storageHead === node) {
       if (node.next) {
         // This condition is not reachable if the node being removed is always the last node.
         // It can be reached if the node being removed is the head node and the node also links to a second node
-        this.#storageHead = node.next;
+        this.storageHead = node.next;
       } else {
-        this.#storageHead = null;
+        this.storageHead = null;
       }
     }
-    if (this.#storageTail === node) {
+    if (this.storageTail === node) {
       if (node.prev) {
-        this.#storageTail = node.prev;
+        this.storageTail = node.prev;
       } else {
-        this.#storageTail = null;
+        this.storageTail = null;
       }
     }
 
@@ -173,15 +187,15 @@ class LruCache<K, V> {
     target.prev = node;
     node.next = target;
 
-    if (this.#storageHead === target) {
-      this.#storageHead = node;
+    if (this.storageHead === target) {
+      this.storageHead = node;
     }
   }
   getMruValue() {
-    return this.#storageHead ? this.#storageHead.value : undefined;
+    return this.storageHead ? this.storageHead.value : undefined;
   }
   getLruValue() {
-    return this.#storageTail ? this.#storageTail.value : undefined;
+    return this.storageTail ? this.storageTail.value : undefined;
   }
   /**
    * Remove all cached items
@@ -190,14 +204,14 @@ class LruCache<K, V> {
     this.init();
   }
   // printMap() {
-  //   this.#map.forEach((node, key) => {
+  //   this.map.forEach((node, key) => {
   //     console.log(`key = ${key}`);
   //     //console.log(node);
   //     console.log(node.value);
   //   });
   // }
   // printList() {
-  //   let node = this.#storageHead;
+  //   let node = this.storageHead;
 
   //   while (node) {
   //     console.log(node.value);

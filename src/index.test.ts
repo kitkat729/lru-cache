@@ -16,13 +16,18 @@ describe('LruCache', () => {
     expect(c.getMruValue()).toEqual(undefined);
   });
 
-  it('caches nothing when cache capacity is 0', () => {
-    const c = new LruCache<string, string>(0);
+  it('caches max 1 item when cache is initialized with default capacity or sub-minimal capacity', () => {
+    const c = new LruCache<string, string>();
 
     c.put('a', 'aaaaa');
-    expect(c.getLruValue()).toEqual(undefined);
-    expect(c.getMruValue()).toEqual(undefined);
-    expect(c.size).toEqual(0);
+    c.put('b', 'bbbbb');
+    expect(c.size).toEqual(1);
+
+    const d = new LruCache<string, string>(0);
+
+    d.put('a', 'aaaaa');
+    d.put('b', 'bbbbb');
+    expect(d.size).toEqual(1);
   });
 
   it('caches 1 value correctly', () => {
@@ -32,7 +37,6 @@ describe('LruCache', () => {
     expect(c.getLruValue()).toEqual('aaaaa');
     expect(c.getMruValue()).toEqual('aaaaa');
     expect(c.size).toEqual(1);
-    //expect(c.get('a')).toEqual('aaaaa');
 
     c.put('b', 'bbbbb'); // b
     expect(c.getLruValue()).toEqual('bbbbb');
@@ -188,11 +192,5 @@ describe('LruCache', () => {
 
     expect(c.get(101)).toEqual({ firstName: 'Harry', lastName: 'Paterson', dob: new Date('1971-03-29') });
     expect(c.size).toEqual(4);
-  });
-  it('can not access protected method', () => {
-    const c = new LruCache<string, string>(3);
-
-    c.prependNode({ key: 'somekey', value: 'somevaluee' } as ListNode<string, string>);
-    expect(c.size).toEqual(0);
   });
 });

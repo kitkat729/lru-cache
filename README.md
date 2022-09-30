@@ -13,10 +13,10 @@ Explanation:
 The code creates a cache instance with a capacity of 100. 100 is the max number of keys the cache can hold. The key will be of type string and the value will be of type string. To take new data, it must get rid of some old ones. At the end, the max size will remain 100, given the capacity remains constant.
 
 Other examples
-LruCache<string, int>(N)
-LruCache<int, int>(N)
-LruCache<int, boolean>(N)
-LruCache<string, CustomType>(N)
+- LruCache<string, int>(N)
+- LruCache<int, int>(N)
+- LruCache<int, boolean>(N)
+- LruCache<string, CustomType>(N)
 
 * Min capacity is 1 if smaller than 1 capacity is given.
 * Default capacity will be used if no capacity is specified

@@ -1,5 +1,11 @@
-import { ListNode } from './types';
-import { MIN_CAPACITY, DEFAULT_CAPACITY } from './constants';
+const MIN_CAPACITY = 1;
+const DEFAULT_CAPACITY = MIN_CAPACITY;
+interface ListNode<K, V> {
+  key: K;
+  value: V | undefined;
+  prev: ListNode<K, V> | null;
+  next: ListNode<K, V> | null;
+}
 
 class LruCache<K, V> {
   private _capacity = MIN_CAPACITY;

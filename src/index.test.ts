@@ -1,5 +1,4 @@
 import LruCache from './index';
-import { ListNode } from './types';
 
 interface Person {
   firstName: string;

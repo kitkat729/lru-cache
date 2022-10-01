@@ -140,20 +140,10 @@ class LruCache<K, V> {
 
     // Adjust head and tail pointers
     if (this.storageHead === node) {
-      if (node.next) {
-        // This condition is not reachable if the node being removed is always the last node.
-        // It can be reached if the node being removed is the head node and the node also links to a second node
-        this.storageHead = node.next;
-      } else {
-        this.storageHead = null;
-      }
+      this.storageHead = node.next;
     }
     if (this.storageTail === node) {
-      if (node.prev) {
-        this.storageTail = node.prev;
-      } else {
-        this.storageTail = null;
-      }
+      this.storageTail = node.prev;
     }
 
     node.prev = null;

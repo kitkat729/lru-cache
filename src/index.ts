@@ -1,5 +1,6 @@
 const MIN_CAPACITY = 1;
 const DEFAULT_CAPACITY = MIN_CAPACITY;
+
 interface ListNode<K, V> {
   key: K;
   value: V | undefined;
@@ -81,6 +82,7 @@ class LruCache<K, V> {
 
     return isSuccess;
   }
+
   /**
    * Get the item associated with the key
    *
@@ -121,18 +123,7 @@ class LruCache<K, V> {
 
     return node;
   }
-  // appendNode(node: ListNode<K, V>) {
-  //   if (this.storageTail) {
-  //     this.storageTail.next = node;
-  //     node.prev = this.storageTail;
-  //   }
-  //   this.storageTail = node;
-  //   if (!this.storageHead) {
-  //     this.storageHead = node;
-  //   }
 
-  //   return node;
-  // }
   /**
    * Remove the node from list
    *
@@ -157,6 +148,7 @@ class LruCache<K, V> {
 
     return node;
   }
+
   /**
    * Move the node in front of the target node. Does not increment size.
    *
@@ -187,33 +179,21 @@ class LruCache<K, V> {
       this.storageHead = node;
     }
   }
+
   getMruValue() {
     return this.storageHead ? this.storageHead.value : undefined;
   }
+
   getLruValue() {
     return this.storageTail ? this.storageTail.value : undefined;
   }
+
   /**
    * Remove all cached items
    */
   clear() {
     this.init();
   }
-  // printMap() {
-  //   this.map.forEach((node, key) => {
-  //     console.log(`key = ${key}`);
-  //     //console.log(node);
-  //     console.log(node.value);
-  //   });
-  // }
-  // printList() {
-  //   let node = this.storageHead;
-
-  //   while (node) {
-  //     console.log(node.value);
-  //     node = node.next;
-  //   }
-  // }
 }
 
 export default LruCache;

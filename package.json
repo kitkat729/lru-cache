@@ -1,5 +1,5 @@
 {
-  "name": "lru-cache",
+  "name": "@kitkat729/lru-cache",
   "version": "0.1.0",
   "description": "Least Recently Used cache",
   "main": "lib/index.js",

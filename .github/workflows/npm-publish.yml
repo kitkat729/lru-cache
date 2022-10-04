@@ -14,7 +14,7 @@ jobs:
           node-version: 16.x
       - name: Test
         run: |
-          npm ci
+          npm i
           npm run lint:format
           npm run test
           npm run build
@@ -29,8 +29,8 @@ jobs:
         with:
           node-version: 16.x
           registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
-      - run: npm publish
+      - run: npm i
+      - run: npm publish --access public
         env:
           NPM_AUTH_TOKEN: ${{secrets.NPM_AUTO_TOKEN}}
 

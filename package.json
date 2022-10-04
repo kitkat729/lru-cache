@@ -8,10 +8,10 @@
   "author": "Hoi Yuen <hoikityuen@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "yarn build:clean && tsc",
+    "build": "rm -rf lib/* && tsc",
     "build:clean": "rm -rf lib/*",
     "lint": "eslint './*.{ts,js}'",
-    "lint:format": "yarn lint --fix",
+    "lint:format": "eslint './*.{ts,js}' --fix",
     "test": "jest --config test/jest/jest.config.js"
   },
   "devDependencies": {

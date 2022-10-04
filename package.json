@@ -10,7 +10,8 @@
   "scripts": {
     "build": "yarn build:clean && tsc",
     "build:clean": "rm -rf lib/*",
-    "lint": "eslint './src/**/*.{ts,js}' --quiet --fix",
+    "lint": "eslint './*.{ts,js}'",
+    "lint:format": "yarn lint --fix",
     "test": "jest --config test/jest/jest.config.js"
   },
   "devDependencies": {

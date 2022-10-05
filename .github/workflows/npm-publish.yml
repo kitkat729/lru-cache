@@ -29,6 +29,7 @@ jobs:
         with:
           node-version: 16.x
           registry-url: 'https://registry.npmjs.org'
+      - run: npm adduser --registry=https://registry.npmjs.org --scope=@riquely --always-auth
       - run: npm i
       - run: npm publish --access public
         env:

@@ -31,7 +31,6 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm config ls -l
       - run: npm config list
-      - run: echo ${{secrets.NPM_AUTO_TOKEN}}
       - run: npm i
       - run: npm publish --access public
         env:

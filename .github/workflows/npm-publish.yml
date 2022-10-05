@@ -29,9 +29,9 @@ jobs:
         with:
           node-version: 16.x
           registry-url: '//registry.npmjs.org/'
-      - env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTO_TOKEN}}
       - run: echo ${{secrets.NPM_AUTO_TOKEN}}
       - run: npm i
       - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTO_TOKEN}}
 

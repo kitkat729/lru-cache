@@ -8,7 +8,7 @@
   "author": "Hoi Yuen <hoikityuen@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf lib/* && node ./build.js",
     "lint": "eslint './src/**/*.{ts,js}' --quiet --fix",
     "test": "jest --config test/jest/jest.config.js"
   },

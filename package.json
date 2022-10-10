@@ -9,7 +9,8 @@
   "license": "MIT",
   "scripts": {
     "build": "rm -rf lib/* && node ./build.js",
-    "lint": "eslint './src/**/*.{ts,js}' --quiet --fix",
+    "lint": "eslint './*.{ts,js}'",
+    "lint:fix": "eslint './*.{ts,js}' --fix",
     "test": "jest --config test/jest/jest.config.js"
   },
   "devDependencies": {

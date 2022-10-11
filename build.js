@@ -3,7 +3,7 @@ const { build } = require('esbuild');
 const { Generator, ELogLevel } = require('npm-dts');
 const path = require('path');
 const { stat } = require('fs');
-const { dependencies, peerDependencies } = require('./package.json');
+const { nodeExternalsPlugin } = require('esbuild-node-externals');
 
 const config = {
   entryPoints: ['src/index.ts'],
@@ -12,7 +12,7 @@ const config = {
   minify: true,
   target: 'es6',
   outdir: './lib',
-  external: Object.keys(dependencies ?? {}).concat(Object.keys(peerDependencies ?? {})),
+  plugins: [nodeExternalsPlugin()],
   logLevel: 'info',
 };
 
@@ -46,4 +46,4 @@ const buildTypeFile = (entry) => {
 
 config.entryPoints.forEach(buildTypeFile);
 
-build(config);
+build(config).catch(() => process.exit(1));

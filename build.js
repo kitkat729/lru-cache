@@ -28,10 +28,10 @@ const buildTypeFile = (entry) => {
     {
       entry: file.base,
       output: path.join(config.outdir, outfile),
-      logLevel: ELogLevel.info,
+      logLevel: ELogLevel.error,
     },
-    false,
     true,
+    false,
   )
     .generate()
     .then(() => {
@@ -44,6 +44,10 @@ const buildTypeFile = (entry) => {
     });
 };
 
-config.entryPoints.forEach(buildTypeFile);
-
-build(config).catch(() => process.exit(1));
+try {
+  config.entryPoints.forEach(buildTypeFile);
+  build(config);
+} catch (e) {
+  console.error('Error: ', e);
+  process.exit(1);
+}

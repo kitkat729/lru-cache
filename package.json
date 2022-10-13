@@ -1,6 +1,6 @@
 {
   "name": "@hyuen/lru-cache",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Least Recently Used cache",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

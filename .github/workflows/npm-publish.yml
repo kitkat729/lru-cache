@@ -1,0 +1,36 @@
+name: NPM publish on release
+on:
+  release:
+    types: [created]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+      - name: Setup Node env 12.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12.x
+      - name: Test
+        run: |
+          npm i
+          npm run lint
+          npm run test
+          npm run build
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+      - name: Setup Node env 12.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12.x
+          registry-url: 'https://register.npmjs.org'
+      - run: npm i
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secretS.NPM_AUTH_TOKEN}}  
+        

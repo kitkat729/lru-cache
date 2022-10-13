@@ -1,0 +1,13 @@
+name: Release on push main
+on:
+  push:
+    branches:
+      - main
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-actions@v3
+        with:
+          release-type: node
+          package-name: release-please-action

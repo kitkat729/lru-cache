@@ -11,7 +11,7 @@ jobs:
         id: release-please
         with:
           release-type: node
-          package-name: test-release-please
+          package-name: release-please-action
   build:
     needs: release 
     runs-on: ubuntu-latest

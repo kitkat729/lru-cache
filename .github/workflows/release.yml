@@ -8,6 +8,43 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: google-github-actions/release-please-action@v3
+        id: release-please
         with:
           release-type: node
-          package-name: release-please-action
+          package-name: test-release-please
+  build:
+    needs: release 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+      - name: Setup Node env 12.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12.x
+      - name: Test
+        run: |
+          npm i
+          npm run lint
+          npm run test
+          npm run build
+  publish:
+    needs: [release, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        if: ${{ needs.release.steps.release-please.outputs.release_created }}
+        uses: actions/checkout@v3
+      - name: Setup Node env 12.x
+        if: ${{ needs.release.steps.release-please.outputs.release_created }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12.x
+          registry-url: 'https://register.npmjs.org'
+      - name: Publishing
+        if: ${{ needs.release.steps.release-please.outputs.release_created }}
+        run: |
+          npm i
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTO_TOKEN}}  
